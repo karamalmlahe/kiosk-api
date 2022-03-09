@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser=require('body-parser');
 const accountsRoute = require('./controllers/accounts');
 
-const port=13000;
+const port=3000;
 const app= express();
 const url="mongodb+srv://karam:1234@cluster0.mbkcj.mongodb.net/kiosk_db?retryWrites=true&w=majority";
 
