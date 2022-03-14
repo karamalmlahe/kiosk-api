@@ -127,7 +127,7 @@ router.post("/verify", async (req, res) => {
             });
         } else {
           return res.status(200).json({
-            message: "Passcode not found",
+            message: "Passcode not correct",
           });
         }
       } else {
@@ -142,6 +142,85 @@ router.post("/verify", async (req, res) => {
       });
     });
 });
+
+router.post("/forgetPassword", (req, res) => {
+  const {email}=req.body;
+  user.findOne({email: email})
+  .then((account)=>{
+    if(account){
+      account.passcode=generateRandomNumber(1000,9999);
+      account.save()
+      .then((account_updated)=>{
+        return res.status(200).json({message: account_updated})
+      })
+      .catch((err) =>{
+        return res.status(500).json({ message:err.message})
+      })
+    }
+    else{
+      return res.status(200).json({message: "User not found"})
+    }
+  }
+  )
+  .catch((err) =>{
+    return res.status(500).json({message: err.message})
+  })
+})
+
+router.post('/VerifyRecaver',(req, res)=>{
+  const {email,passcode}=req.body;
+  user.findOne({ email: email})
+  .then((account)=>{
+    if(account){
+      if(account.passcode==passcode){
+        return res.status(200).json({message:'passcode is correct',isCorrect: true});
+      }
+      else{
+        return res.status(200).json({message:'passcode is incorrect',isCorrect: false});
+      }
+
+    }
+    else{
+      return res.status(200).json({ message:'User not found'});
+    }
+  })
+  .catch(err=>{
+    return res.status(500).json({ message: err.message})
+  })
+})
+
+router.post('/updatePassword',(req, res)=>{
+  const {email,newpassword}=req.body;
+  user.findOne({ email: email})
+  .then(async(account)=>{
+    if(account){
+      const isMatch = await bcryptjs.compare(newpassword, account.password);
+      if(!isMatch){
+        const formatted_password = await bcryptjs.hash(newpassword, 10);
+        account.password=formatted_password;
+        account.save()
+        .then(account_updated=>{
+          return res.status(200).json({message:account_updated});
+        })
+        .catch(err=>{
+          return res.status(500).json({ message: err.message})
+        })
+      }
+      else{
+        return res.status(200).json({message:"This is your password now"});
+      }
+    }
+    else{
+      return res.status(200).json({message: 'User is not found'});
+    }
+  })
+  .catch(err=>{
+    return res.status(500).json({ message: err.message});
+  })
+})
+
+
+
 const generateRandomNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
