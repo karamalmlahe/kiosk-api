@@ -229,7 +229,7 @@ router.get("/sayHello", async (req, res) => {
     const users = await user.find();
     return res.status(200).json({ message: users });
   } catch (error) {
-    return res.status(200).json({ message: error });
+    return res.status(500).json({ message: error });
   }
 });
 
