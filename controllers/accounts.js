@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const router = express.Router();
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
 const user = require("./../models/user");
+const isAuth=require('./isAuth');
 
 router.post("/createAccount", async (req, res) => {
   //Get user input
@@ -167,29 +167,7 @@ router.post("/forgetPassword", (req, res) => {
   })
 })
 
-router.post('/VerifyRecaver',(req, res)=>{
-  const {email,passcode}=req.body;
-  user.findOne({ email: email})
-  .then((account)=>{
-    if(account){
-      if(account.passcode==passcode){
-        return res.status(200).json({message:'passcode is correct',isCorrect: true});
-      }
-      else{
-        return res.status(200).json({message:'passcode is incorrect',isCorrect: false});
-      }
-
-    }
-    else{
-      return res.status(200).json({ message:'User not found'});
-    }
-  })
-  .catch(err=>{
-    return res.status(500).json({ message: err.message})
-  })
-})
-
-router.post('/updatePassword',(req, res)=>{
+router.post('/updateNewPassword',(req, res)=>{
   const {email,newpassword}=req.body;
   user.findOne({ email: email})
   .then(async(account)=>{
@@ -216,6 +194,14 @@ router.post('/updatePassword',(req, res)=>{
   })
   .catch(err=>{
     return res.status(500).json({ message: err.message});
+  })
+})
+
+
+router.get('/getUserData', isAuth,async(req,res)=>{
+
+  return res.status(200).json({
+    message:`Hello ${req.account.firstName}`
   })
 })
 
