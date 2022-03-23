@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser=require('body-parser');
 const accountsRoute = require('./controllers/accounts');
+const storeRoute = require('./controllers/store');
 
 const port=3000;
 const app= express();
@@ -10,6 +11,7 @@ const url="mongodb+srv://karam:1234@cluster0.mbkcj.mongodb.net/kiosk_db?retryWri
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use('/api/accounts',accountsRoute);
+app.use('/api/store',storeRoute);
 
 mongoose.connect(url)
 .then(res =>{

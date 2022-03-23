@@ -11,6 +11,14 @@ const userSchema=new Schema({
     firstName:String,
     lastName:String,
     passcode:Number,
+    dob:Date,
+    subs:[
+        {
+            storeId: { type: mongoose.Schema.Types.ObjectId, ref: 'Store' },
+        }
+    ],
+    level:{type:String,default:'Newbie'},
+    points:{type:Number,default:0},
     isBusiness:{type:Boolean,default:false},
     isApproved:{type:Boolean,default:false},
     isLocked:{type:Boolean,default:false}
