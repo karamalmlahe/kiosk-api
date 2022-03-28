@@ -5,6 +5,7 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const user = require("./../models/user");
 const isAuth=require('./isAuth');
+const Store = require("./../models/store");
 
 router.post("/createAccount", async (req, res) => {
   //Get user input
@@ -199,9 +200,11 @@ router.post('/updateNewPassword',(req, res)=>{
 
 
 router.get('/getUserData', isAuth,async(req,res)=>{
-
-  return res.status(200).json({
-    message:`Hello ${req.account.firstName}`
+  const id =req.account._id;
+  const store=await Store.findOne({associatedId:id}).populate("associatedId")
+   return res.status(200).json({
+    message:`Hello ${req.account.firstName}`,
+    storeName:`Store Name : ${store.storeName}`
   })
 })
 
