@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const user=require('./user');
 
 const storeSchema = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -34,8 +33,8 @@ const storeSchema = new Schema({
     workingHours: [
         {
             day: Number,
-            fromHour: String,
-            toHour: String,
+            fromHour: Number,
+            toHour: Number,
             isOpen: Boolean,
         }
     ],

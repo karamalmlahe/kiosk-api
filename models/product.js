@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const ProductSchema = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
     storeId: { type: mongoose.Schema.Types.ObjectId, ref: 'Store' },
-    productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
+    categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
     productName: String,
     createdAt: { type: Date, default: Date.now },
     productImages:[

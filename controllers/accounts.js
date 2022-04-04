@@ -204,7 +204,7 @@ router.get('/getUserData', isAuth,async(req,res)=>{
   const store=await Store.findOne({associatedId:id}).populate("associatedId")
    return res.status(200).json({
     message:`Hello ${req.account.firstName}`,
-    storeName:`Store Name : ${store.storeName}`
+    Store:store
   })
 })
 

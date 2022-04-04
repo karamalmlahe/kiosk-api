@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser=require('body-parser');
 const accountsRoute = require('./controllers/accounts');
 const storeRoute = require('./controllers/store');
+const productRoute = require('./controllers/product');
 
 const port=3000;
 const app= express();
@@ -12,6 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use('/api/accounts',accountsRoute);
 app.use('/api/store',storeRoute);
+app.use('/api/product',productRoute);
 
 mongoose.connect(url)
 .then(res =>{
