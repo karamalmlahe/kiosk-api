@@ -121,5 +121,12 @@ router.post("/createStore", isAuth, async (req, res) => {
       });
   }
 });
+router.get('/getGeneralData', async(request,response) => {
+  const stores = await Store.find();
+  return response.status(200).json({
+      status: true,
+      stores: stores
+  });
+})
 
 module.exports = router;
