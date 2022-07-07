@@ -134,10 +134,11 @@ router.post('/addProduct/:categoryId', isAuth, async (req, res) => {
             });
         })
 })
-router.put('/updateProduct/:productId', isAuth, async (req, res) => {
-    const { productName, productImages, price, unitInStock, desclimer, isAgeLimitation } = req.body;
+router.put('/updateProduct/:categoryId/:productId', isAuth, async (req, res) => {
+    const { productName, productImages, price, unitInStock, desclimer, isAgeLimitation,discount } = req.body;
     const productId = req.params.productId;
-    Product.findById(productId)
+    const categoryId = req.params.categoryId;
+    Product.findOneAndDelete({_id:productId,categoryId:categoryId})
         .then(product => {
             if (product) {
                 product.productName = productName;
@@ -146,6 +147,7 @@ router.put('/updateProduct/:productId', isAuth, async (req, res) => {
                 product.unitInStock = unitInStock;
                 product.desclimer = desclimer;
                 product.isAgeLimitation = isAgeLimitation;
+                product.discount=discount;
                 product.save()
                     .then(product_updated => {
                         return res.status(200).json({
@@ -169,9 +171,10 @@ router.put('/updateProduct/:productId', isAuth, async (req, res) => {
         })
 
 })
-router.delete('/deleteProduct/:productId', isAuth, async (req, res) => {
+router.delete('/deleteProduct/:categoryId/:productId', isAuth, async (req, res) => {
     const productId = req.params.productId;
-    Product.findByIdAndDelete(productId)
+    const categoryId = req.params.categoryId;
+    Product.findOneAndDelete({_id:productId,categoryId:categoryId})
         .then(product_deleted => {
             return res.status(200).json({ status: true, message: product_deleted });
         })

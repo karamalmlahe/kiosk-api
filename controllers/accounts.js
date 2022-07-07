@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 const user = require("./../models/user");
 const isAuth=require('./isAuth');
 const Store = require("./../models/store");
+const Category = require("./../models/category");
+const Product = require("./../models/product");
 
 router.post("/createAccount", async (req, res) => {
   //Get user input
@@ -201,10 +203,23 @@ router.post('/updateNewPassword',(req, res)=>{
 
 router.get('/getUserData', isAuth,async(req,res)=>{
   const id =req.account._id;
-  const store=await Store.findOne({associatedId:id}).populate("associatedId")
+  const store=await Store.findOne({associatedId:id}).populate("associatedId");
+  const categories= await Category.find({storeId:store._id});
+  const products= await Product.find({storeId:store._id});
+  let New=[];
+  categories.forEach( category=>{
+    let p=[];
+    let categoryId=category._id;
+    products.forEach( product=>{
+      if(categoryId.equals(product.categoryId)){
+        p.push(product);
+      }
+    })
+    New.push({CategoryName:category.categoryName,products:p})
+  })
    return res.status(200).json({
     message:`Hello ${req.account.firstName}`,
-    Store:store
+    Store:New
   })
 })
 
